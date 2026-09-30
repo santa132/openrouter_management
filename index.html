@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenRouter Management Console</title>
+    <meta name="description" content="Quản lý API Key, Models, Chi phí và Analytics cho OpenRouter AI Platform">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="brand-logo">
+                    <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="32" height="32" rx="8" fill="url(#brand-grad)"/>
+                        <path d="M9 16L14 21L23 11" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="brand-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6366F1"/>
+                                <stop offset="1" stop-color="#A855F7"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="brand-info">
+                    <h2>OpenRouter</h2>
+                    <span class="badge badge-glow">Console v2.4</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <div class="nav-section">MAIN MENU</div>
+                <a href="#dashboard" class="nav-item active" data-tab="dashboard">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+                        <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+                        <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+                        <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#keys" class="nav-item" data-tab="keys">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 2l-2 2m-2-2l2 2m7 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        <path d="M15 9l-6 6m0 0l-3-3m3 3l3 3"></path>
+                    </svg>
+                    <span>API Keys</span>
+                    <span class="badge-count" id="active-keys-count">3</span>
+                </a>
+                <a href="#models" class="nav-item" data-tab="models">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                    <span>Model Directory</span>
+                </a>
+                <a href="#analytics" class="nav-item" data-tab="analytics">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    <span>Usage & Analytics</span>
+                </a>
+                <a href="#playground" class="nav-item" data-tab="playground">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    <span>Prompt Playground</span>
+                </a>
+
+                <div class="nav-section">CONFIGURATIONS</div>
+                <a href="#settings" class="nav-item" data-tab="settings">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"></path>
+                    </svg>
+                    <span>Cài Đặt Account</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="credit-card">
+                    <div class="credit-title">Credits Khả Dụng</div>
+                    <div class="credit-amount">$142.85</div>
+                    <div class="credit-bar">
+                        <div class="credit-progress" style="width: 68%;"></div>
+                    </div>
+                    <div class="credit-subtext">Hạn mức $200.00 / tháng</div>
+                    <button class="btn btn-sm btn-primary-gradient mt-2 w-100" id="btn-topup">+ Nạp thêm Credit</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="main-content">
+            <!-- Header Top Bar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="mobile-menu-btn" id="mobile-toggle">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                    <div class="search-box">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" placeholder="Tìm kiếm API Keys, Models (Claude, GPT-4, DeepSeek)..." id="global-search">
+                    </div>
+                </div>
+
+                <div class="topbar-right">
+                    <div class="status-indicator" title="OpenRouter Status">
+                        <span class="status-dot green"></span>
+                        <span class="status-text">All Systems Operational</span>
+                    </div>
+
+                    <button class="icon-btn" id="theme-toggle" title="Đổi giao diện">
+                        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </button>
+
+                    <div class="user-profile">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=OpenRouterAdmin" alt="Avatar" class="avatar">
+                        <div class="user-info">
+                            <span class="user-name">Developer Org</span>
+                            <span class="user-role">Pro Tier</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dynamic Tab View Containers -->
+            <div class="view-container">
+
+                <!-- 1. DASHBOARD VIEW -->
+                <section class="tab-content active" id="dashboard-view">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Dashboard Overview</h1>
+                            <p class="page-subtitle">Tổng quan hoạt động API, lưu lượng tokens và mức tiêu thụ chi phí tính theo thời gian thực.</p>
+                        </div>
+                        <div class="header-actions">
+                            <button class="btn btn-secondary" id="btn-refresh-stats">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 4 23 10 17 10"></polyline>
+                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                                </svg>
+                                Làm mới dữ liệu
+                            </button>
+                            <button class="btn btn-primary-gradient" id="btn-create-key-quick">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                Tạo Key Mới
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Metric Cards Grid -->
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-title">Tổng Chi Phí (30 ngày)</span>
+                                <div class="metric-icon purple">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="metric-value" id="val-total-spend">$57.15</div>
+                            <div class="metric-footer">
+                                <span class="trend positive">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                        <polyline points="17 6 23 6 23 12"></polyline>
+                                    </svg>
+                                    +12.4%
+                                </span>
+                                <span class="metric-subtext">so với tháng trước</span>
+                            </div>
+                        </div>
+
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-title">Tổng Request (24h)</span>
+                                <div class="metric-icon blue">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="metric-value" id="val-requests">48,290</div>
+                            <div class="metric-footer">
+                                <span class="trend positive">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                        <polyline points="17 6 23 6 23 12"></polyline>
+                                    </svg>
+                                    +8.1%
+                                </span>
+                                <span class="metric-subtext">99.8% thành công</span>
+                            </div>
+                        </div>
+
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-title">Token Tiêu Thụ (24h)</span>
+                                <div class="metric-icon emerald">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="metric-value" id="val-tokens">14.2M</div>
+                            <div class="metric-footer">
+                                <span class="metric-subtext">Input: 10.5M | Output: 3.7M</span>
+                            </div>
+                        </div>
+
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-title">Thời Gian Phản Hồi TB</span>
+                                <div class="metric-icon orange">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="metric-value" id="val-latency">410 ms</div>
+                            <div class="metric-footer">
+                                <span class="trend positive">
+                                    -45ms (Nhanh hơn 10%)
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts & Top Models Row -->
+                    <div class="grid-2-col mt-4">
+                        <!-- Chart Card -->
+                        <div class="card card-glow">
+                            <div class="card-header">
+                                <div>
+                                    <h3 class="card-title">Lưu Lượng Requests & Chi Phí (7 ngày qua)</h3>
+                                    <p class="card-subtitle">Biểu đồ biến động token tiêu thụ qua OpenRouter Router</p>
+                                </div>
+                                <div class="pill-selectors">
+                                    <button class="pill active" data-period="7d">7 Ngày</button>
+                                    <button class="pill" data-period="30d">30 Ngày</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container" id="dashboard-chart-wrapper">
+                                    <!-- Rendered via JS SVG -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Top Models Distribution Card -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Top Models Sử Dụng Nhiều Nhất</h3>
+                                <a href="#models" class="card-link" data-tab-trigger="models">Xem tất cả model &rarr;</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="model-usage-list" id="top-models-list">
+                                    <!-- Populated via JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Request Stream Table -->
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <div class="d-flex align-center gap-2">
+                                <span class="status-dot green pulse"></span>
+                                <h3 class="card-title">Live API Request Stream</h3>
+                            </div>
+                            <span class="badge badge-secondary">Tự động cập nhật</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table" id="live-requests-table">
+                                <thead>
+                                    <tr>
+                                        <th>THỜI GIAN</th>
+                                        <th>MODEL</th>
+                                        <th>API KEY</th>
+                                        <th>TOKENS (IN/OUT)</th>
+                                        <th>LATENCY</th>
+                                        <th>CHI PHÍ</th>
+                                        <th>TRẠNG THÁI</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. API KEYS VIEW -->
+                <section class="tab-content" id="keys-view">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Quản Lý API Keys</h1>
+                            <p class="page-subtitle">Tạo, định cấu hình hạn mức chi tiêu và quản lý quyền truy cập API Key của bạn.</p>
+                        </div>
+                        <button class="btn btn-primary-gradient" id="btn-open-create-key-modal">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Tạo API Key Mới
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="search-box table-search">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <input type="text" placeholder="Lọc theo tên Key..." id="key-search-input">
+                            </div>
+                            <div class="d-flex gap-2">
+                                <select class="form-select" id="key-status-filter">
+                                    <option value="all">Tất cả trạng thái</option>
+                                    <option value="active">Đang hoạt động (Active)</option>
+                                    <option value="disabled">Đã khóa (Disabled)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="data-table" id="api-keys-table">
+                                <thead>
+                                    <tr>
+                                        <th>TÊN API KEY</th>
+                                        <th>MÃ KEY HASH</th>
+                                        <th>HẠN MỨC (CREDITS)</th>
+                                        <th>ĐÃ SỬ DỤNG</th>
+                                        <th>NGÀY TẠO</th>
+                                        <th>TRẠNG THÁI</th>
+                                        <th>THAO TÁC</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. MODEL DIRECTORY VIEW -->
+                <section class="tab-content" id="models-view">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">OpenRouter Model Directory & Pricing</h1>
+                            <p class="page-subtitle">Khám phá hơn 100+ LLMs hàng đầu (Claude 3.5, GPT-4o, DeepSeek V3, Llama 3.3) cùng bảng giá & độ trễ.</p>
+                        </div>
+                    </div>
+
+                    <!-- Calculator Banner -->
+                    <div class="calculator-banner">
+                        <div class="calc-info">
+                            <h3><span class="text-gradient">Cost Estimator:</span> Tính Chi Phí Ước Tính</h3>
+                            <p>Nhập số lượng token dự kiến để xem chi phí chính xác trên các Model khác nhau.</p>
+                        </div>
+                        <div class="calc-inputs">
+                            <div class="form-group-inline">
+                                <label>Input Tokens:</label>
+                                <input type="number" id="calc-input-tokens" value="10000" step="1000">
+                            </div>
+                            <div class="form-group-inline">
+                                <label>Output Tokens:</label>
+                                <input type="number" id="calc-output-tokens" value="2000" step="500">
+                            </div>
+                            <div class="calc-result-box">
+                                <span>Giá ước tính (Mẫu):</span>
+                                <strong id="calc-result-price">$0.0360</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filter Controls -->
+                    <div class="model-filters">
+                        <div class="filter-group">
+                            <button class="filter-btn active" data-provider="all">Tất cả Providers</button>
+                            <button class="filter-btn" data-provider="anthropic">Anthropic</button>
+                            <button class="filter-btn" data-provider="openai">OpenAI</button>
+                            <button class="filter-btn" data-provider="google">Google</button>
+                            <button class="filter-btn" data-provider="deepseek">DeepSeek</button>
+                            <button class="filter-btn" data-provider="meta">Meta Llama</button>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <select class="form-select" id="model-sort-by">
+                                <option value="popular">Phổ biến nhất</option>
+                                <option value="price-asc">Giá: Thấp đến Cao</option>
+                                <option value="price-desc">Giá: Cao đến Thấp</option>
+                                <option value="context-desc">Context Window lớn nhất</option>
+                                <option value="speed-desc">Tốc độ (Tokens/s)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Models Cards Grid -->
+                    <div class="models-grid" id="models-grid-container">
+                        <!-- Populated via JS -->
+                    </div>
+                </section>
+
+                <!-- 4. ANALYTICS VIEW -->
+                <section class="tab-content" id="analytics-view">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Analytics & Phân Tích Chuyên Sâu</h1>
+                            <p class="page-subtitle">Theo dõi phân bổ token, độ trễ hệ thống và xu hướng chi tiêu theo nhà cung cấp.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid-2-col">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Phân Bổ Chi Phí Theo Provider</h3>
+                            </div>
+                            <div class="card-body center-chart">
+                                <div class="pie-chart-wrapper" id="provider-pie-chart">
+                                    <!-- Rendered SVG Pie -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Độ Trễ Trung Bình (Latency ms)</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="latency-bars-list" id="latency-bars">
+                                    <!-- Populated JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h3 class="card-title">Báo Cáo Chi Tiết Token 30 Ngày Qua</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>NGÀY</th>
+                                        <th>REQUESTS</th>
+                                        <th>INPUT TOKENS</th>
+                                        <th>OUTPUT TOKENS</th>
+                                        <th>TỔNG CHI PHÍ ($)</th>
+                                        <th>THỜI GIAN TB</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="analytics-history-tbody">
+                                    <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. PLAYGROUND VIEW -->
+                <section class="tab-content" id="playground-view">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">OpenRouter Prompt Playground</h1>
+                            <p class="page-subtitle">Thử nghiệm prompt thời gian thực trực tiếp với các AI models thông qua OpenRouter API.</p>
+                        </div>
+                    </div>
+
+                    <div class="playground-layout">
+                        <!-- Controls Sidebar -->
+                        <div class="card playground-sidebar">
+                            <h3 class="card-title mb-3">Cấu Hình Model</h3>
+
+                            <div class="form-group mb-3">
+                                <label class="form-label">Chọn AI Model</label>
+                                <select class="form-select" id="pg-model-select">
+                                    <option value="anthropic/claude-3.5-sonnet">Anthropic: Claude 3.5 Sonnet</option>
+                                    <option value="openai/gpt-4o">OpenAI: GPT-4o</option>
+                                    <option value="deepseek/deepseek-chat">DeepSeek: DeepSeek V3</option>
+                                    <option value="google/gemini-2.0-flash">Google: Gemini 2.0 Flash</option>
+                                    <option value="meta-llama/llama-3.3-70b-instruct">Meta: Llama 3.3 70B</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label class="form-label d-flex justify-content-between">
+                                    <span>Temperature</span>
+                                    <strong id="pg-temp-val">0.7</strong>
+                                </label>
+                                <input type="range" class="form-range" id="pg-temp-slider" min="0" max="2" step="0.1" value="0.7">
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label class="form-label d-flex justify-content-between">
+                                    <span>Max Tokens</span>
+                                    <strong id="pg-max-tokens-val">2048</strong>
+                                </label>
+                                <input type="range" class="form-range" id="pg-max-tokens" min="256" max="8192" step="256" value="2048">
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label class="form-label">System Prompt</label>
+                                <textarea class="form-control" id="pg-system-prompt" rows="3" placeholder="Ví dụ: Bạn là một chuyên gia lập trình web cao cấp...">Bạn là một trợ lý AI thông minh, hỗ trợ lập trình và giải đáp mọi câu hỏi một cách chính xác, ngắn gọn.</textarea>
+                            </div>
+                        </div>
+
+                        <!-- Chat & Output Console -->
+                        <div class="card playground-main">
+                            <div class="card-header">
+                                <h3 class="card-title">Prompt & Response Box</h3>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-secondary" id="pg-btn-clear">Xóa nội dung</button>
+                                </div>
+                            </div>
+
+                            <div class="card-body playground-messages-area" id="pg-messages-container">
+                                <div class="playground-welcome">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                    </svg>
+                                    <h4>Sẵn sàng thử nghiệm OpenRouter API</h4>
+                                    <p>Nhập tin nhắn hoặc yêu cầu của bạn ở bên dưới và nhấn <strong>Gửi Request</strong> để kiểm tra phản hồi từ Model.</p>
+                                </div>
+                            </div>
+
+                            <div class="playground-input-area">
+                                <textarea class="form-control" id="pg-user-input" rows="3" placeholder="Nhập prompt thử nghiệm tại đây... (Ví dụ: Viết hàm JavaScript tính Fibonacci sử dụng memoization)"></textarea>
+                                <div class="playground-footer-action">
+                                    <div class="playground-stats" id="pg-stats-info">
+                                        <span>Latency: -- ms</span> | <span>Tokens: 0</span>
+                                    </div>
+                                    <button class="btn btn-primary-gradient" id="pg-btn-send">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                        </svg>
+                                        Gửi Request (Run)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. SETTINGS VIEW -->
+                <section class="tab-content" id="settings-view">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Cài Đặt Tài Khoản & Cấu Hình</h1>
+                            <p class="page-subtitle">Quản lý tài khoản, thông báo webhook và ngưỡng hạn mức tự động.</p>
+                        </div>
+                    </div>
+
+                    <div class="card max-w-700">
+                        <div class="card-header">
+                            <h3 class="card-title">Cấu Hình Hạn Mức Chi Tiêu (Auto Safeguards)</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group mb-4">
+                                <label class="form-label">Cảnh Báo Email Khi Đạt Ngưỡng Chi Phí ($)</label>
+                                <input type="number" class="form-control" value="150" id="setting-alert-spend">
+                                <span class="form-help">Hệ thống sẽ gửi email cảnh báo khi tổng chi phí vượt quá ngưỡng này.</span>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label class="form-label">Tự Động Tắt API Key (Auto-hard limit)</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="setting-hard-limit" checked>
+                                    <label class="form-check-label" for="setting-hard-limit">Tạm dừng tất cả request nếu số dư credit = $0</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label class="form-label">Default Fallback Model Order</label>
+                                <input type="text" class="form-control" value="anthropic/claude-3.5-sonnet, openai/gpt-4o, deepseek/deepseek-chat" id="setting-fallback">
+                                <span class="form-help">Nếu model chính bị sự cố, OpenRouter sẽ tự động chuyển hướng request qua model tiếp theo.</span>
+                            </div>
+
+                            <button class="btn btn-primary-gradient" id="btn-save-settings">Lưu Cấu Hình</button>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL: CREATE API KEY -->
+    <div class="modal-backdrop" id="create-key-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Tạo OpenRouter API Key Mới</h3>
+                <button class="modal-close" id="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="create-key-form">
+                    <div class="form-group mb-3">
+                        <label class="form-label">Tên API Key <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="new-key-name" placeholder="Ví dụ: Production Backend App, Chatbot Staging..." required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label">Hạn Mức Chi Tiêu (Credit Limit - $)</label>
+                        <input type="number" class="form-control" id="new-key-limit" placeholder="Để trống nếu không giới hạn" value="50" step="5">
+                        <span class="form-help">Đặt hạn mức tối đa Key này được phép tiêu thụ.</span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label">Tốc Độ Tối Đa (Rate Limit - Request/Phút)</label>
+                        <input type="number" class="form-control" id="new-key-rate" value="120">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modal-cancel-btn">Hủy bỏ</button>
+                <button class="btn btn-primary-gradient" id="modal-submit-btn">Tạo Key Ngay</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: CREATED KEY SUCCESS -->
+    <div class="modal-backdrop" id="key-success-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="text-success">✔ API Key Đã Được Tạo Thành Công</h3>
+                <button class="modal-close" id="key-success-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="text-warning">Hãy sao chép ngay API Key của bạn. Vì lý do bảo mật, chìa khóa này sẽ không được hiển thị lại lần thứ hai!</p>
+                <div class="key-display-box">
+                    <code id="generated-key-text">sk-or-v1-84920491823940182394081293401928</code>
+                    <button class="btn btn-sm btn-secondary" id="btn-copy-generated">Sao Chép</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary-gradient" id="btn-done-created">Đã Lưu Chìa Khóa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
